@@ -1,0 +1,45 @@
+{
+  "canonical_source": "/Users/ashling/Desktop/Grok Local/Cookie Soul/sprites/",
+  "note": "Position by feet_anchor_frac on a dock or window edge. Do not center the sprite on the display. Start live pose with cookie_sit or cookie_alert.",
+  "sprites": [
+    {
+      "file": "cookie_sleep.png",
+      "pixel_size": [252, 312],
+      "feet_anchor_frac": [0.679, 0.978],
+      "default_idle": false
+    },
+    {
+      "file": "cookie_alert.png",
+      "pixel_size": [248, 310],
+      "feet_anchor_frac": [0.5, 0.987],
+      "default_idle": true,
+      "note": "Good default idle"
+    },
+    {
+      "file": "cookie_sit.png",
+      "pixel_size": [209, 330],
+      "feet_anchor_frac": [0.431, 0.997],
+      "default_idle": true,
+      "note": "Approved sit — good default idle"
+    },
+    {
+      "file": "cookie_sit_eyes_closed.png",
+      "pixel_size": [184, 310],
+      "feet_anchor_frac": [0.418, 0.977],
+      "default_idle": false
+    },
+    {
+      "file": "cookie_loaf.png",
+      "pixel_size": [309, 310],
+      "feet_anchor_frac": [0.573, 0.974],
+      "default_idle": false
+    },
+    {
+      "file": "cookie_suitcase.png",
+      "pixel_size": [303, 281],
+      "feet_anchor_frac": [0.139, 0.975],
+      "default_idle": false,
+      "note": "Cookie + case + bandana as one unit. Anchor is bottom-left of the suitcase base."
+    }
+  ]
+}

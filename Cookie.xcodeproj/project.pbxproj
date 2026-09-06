@@ -1,0 +1,318 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000100000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000001 /* AppDelegate.swift */; };
+		A10000000000000100000002 /* Pose.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000002 /* Pose.swift */; };
+		A10000000000000100000003 /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000003 /* LoginItem.swift */; };
+		A10000000000000100000004 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000004 /* SoundPlayer.swift */; };
+		A10000000000000100000005 /* PerchFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000005 /* PerchFinder.swift */; };
+		A10000000000000100000006 /* OverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000006 /* OverlayWindow.swift */; };
+		A10000000000000100000007 /* RoommateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000007 /* RoommateController.swift */; };
+		A10000000000000100000008 /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000008 /* StatusItemController.swift */; };
+		A20000000000000100000001 /* cookie_sleep.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000001 /* cookie_sleep.png */; };
+		A20000000000000100000002 /* cookie_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000002 /* cookie_alert.png */; };
+		A20000000000000100000003 /* cookie_sit.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000003 /* cookie_sit.png */; };
+		A20000000000000100000004 /* cookie_sit_eyes_closed.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000004 /* cookie_sit_eyes_closed.png */; };
+		A20000000000000100000005 /* cookie_loaf.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000005 /* cookie_loaf.png */; };
+		A20000000000000100000006 /* cookie_suitcase.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000006 /* cookie_suitcase.png */; };
+		A20000000000000100000007 /* _meta.json in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000007 /* _meta.json */; };
+		A20000000000000100000008 /* cookie_soft.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000008 /* cookie_soft.wav */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B10000000000000100000001 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B10000000000000100000002 /* Pose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pose.swift; sourceTree = "<group>"; };
+		B10000000000000100000003 /* LoginItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
+		B10000000000000100000004 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
+		B10000000000000100000005 /* PerchFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerchFinder.swift; sourceTree = "<group>"; };
+		B10000000000000100000006 /* OverlayWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindow.swift; sourceTree = "<group>"; };
+		B10000000000000100000007 /* RoommateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoommateController.swift; sourceTree = "<group>"; };
+		B10000000000000100000008 /* StatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
+		C10000000000000100000001 /* cookie_sleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_sleep.png; sourceTree = "<group>"; };
+		C10000000000000100000002 /* cookie_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_alert.png; sourceTree = "<group>"; };
+		C10000000000000100000003 /* cookie_sit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_sit.png; sourceTree = "<group>"; };
+		C10000000000000100000004 /* cookie_sit_eyes_closed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_sit_eyes_closed.png; sourceTree = "<group>"; };
+		C10000000000000100000005 /* cookie_loaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_loaf.png; sourceTree = "<group>"; };
+		C10000000000000100000006 /* cookie_suitcase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_suitcase.png; sourceTree = "<group>"; };
+		C10000000000000100000007 /* _meta.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = _meta.json; sourceTree = "<group>"; };
+		C10000000000000100000008 /* cookie_soft.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = cookie_soft.wav; sourceTree = "<group>"; };
+		D10000000000000100000001 /* Cookie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cookie.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D10000000000000100000002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D10000000000000100000003 /* Cookie.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cookie.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E10000000000000100000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F10000000000000100000001 = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000100000002 /* Cookie */,
+				F10000000000000100000003 /* Sprites */,
+				F10000000000000100000005 /* Sounds */,
+				F10000000000000100000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F10000000000000100000002 /* Cookie */ = {
+			isa = PBXGroup;
+			children = (
+				B10000000000000100000001 /* AppDelegate.swift */,
+				B10000000000000100000007 /* RoommateController.swift */,
+				B10000000000000100000006 /* OverlayWindow.swift */,
+				B10000000000000100000005 /* PerchFinder.swift */,
+				B10000000000000100000002 /* Pose.swift */,
+				B10000000000000100000008 /* StatusItemController.swift */,
+				B10000000000000100000004 /* SoundPlayer.swift */,
+				B10000000000000100000003 /* LoginItem.swift */,
+				D10000000000000100000002 /* Info.plist */,
+				D10000000000000100000003 /* Cookie.entitlements */,
+			);
+			path = Cookie;
+			sourceTree = "<group>";
+		};
+		F10000000000000100000003 /* Sprites */ = {
+			isa = PBXGroup;
+			children = (
+				C10000000000000100000001 /* cookie_sleep.png */,
+				C10000000000000100000002 /* cookie_alert.png */,
+				C10000000000000100000003 /* cookie_sit.png */,
+				C10000000000000100000004 /* cookie_sit_eyes_closed.png */,
+				C10000000000000100000005 /* cookie_loaf.png */,
+				C10000000000000100000006 /* cookie_suitcase.png */,
+				C10000000000000100000007 /* _meta.json */,
+			);
+			name = Sprites;
+			path = Assets/Sprites;
+			sourceTree = "<group>";
+		};
+		F10000000000000100000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D10000000000000100000001 /* Cookie.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F10000000000000100000005 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				C10000000000000100000008 /* cookie_soft.wav */,
+			);
+			name = Sounds;
+			path = Assets/Sounds;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		T10000000000000100000001 /* Cookie */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = L10000000000000100000002 /* Build configuration list for PBXNativeTarget "Cookie" */;
+			buildPhases = (
+				P10000000000000100000001 /* Sources */,
+				E10000000000000100000001 /* Frameworks */,
+				P10000000000000100000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Cookie;
+			productName = Cookie;
+			productReference = D10000000000000100000001 /* Cookie.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		P00000000000000100000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					T10000000000000100000001 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = L10000000000000100000001 /* Build configuration list for PBXProject "Cookie" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F10000000000000100000001;
+			productRefGroup = F10000000000000100000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				T10000000000000100000001 /* Cookie */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		P10000000000000100000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A20000000000000100000001 /* cookie_sleep.png in Resources */,
+				A20000000000000100000002 /* cookie_alert.png in Resources */,
+				A20000000000000100000003 /* cookie_sit.png in Resources */,
+				A20000000000000100000004 /* cookie_sit_eyes_closed.png in Resources */,
+				A20000000000000100000005 /* cookie_loaf.png in Resources */,
+				A20000000000000100000006 /* cookie_suitcase.png in Resources */,
+				A20000000000000100000007 /* _meta.json in Resources */,
+				A20000000000000100000008 /* cookie_soft.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		P10000000000000100000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000100000001 /* AppDelegate.swift in Sources */,
+				A10000000000000100000002 /* Pose.swift in Sources */,
+				A10000000000000100000003 /* LoginItem.swift in Sources */,
+				A10000000000000100000004 /* SoundPlayer.swift in Sources */,
+				A10000000000000100000005 /* PerchFinder.swift in Sources */,
+				A10000000000000100000006 /* OverlayWindow.swift in Sources */,
+				A10000000000000100000007 /* RoommateController.swift in Sources */,
+				A10000000000000100000008 /* StatusItemController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		S10000000000000100000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		S10000000000000100000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		S10000000000000100000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Cookie/Cookie.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Cookie/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ashlingsui.cookie;
+				PRODUCT_NAME = Cookie;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		S10000000000000100000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Cookie/Cookie.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Cookie/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ashlingsui.cookie;
+				PRODUCT_NAME = Cookie;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		L10000000000000100000001 /* Build configuration list for PBXProject "Cookie" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				S10000000000000100000001 /* Debug */,
+				S10000000000000100000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		L10000000000000100000002 /* Build configuration list for PBXNativeTarget "Cookie" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				S10000000000000100000003 /* Debug */,
+				S10000000000000100000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = P00000000000000100000001 /* Project object */;
+}
