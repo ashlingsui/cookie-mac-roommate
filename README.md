@@ -1,8 +1,8 @@
 # cookie-mac-roommate
 
-Mac desktop roommate that puts my cat on your screen while you work — cat-honest presence, nudge-to-shoo, soft rare sounds. Not a chatbot.
+Mac desktop roommate that puts my cat on your screen while you work — cat-honest presence, muteable sounds, muteable bratty bubbles. Not a chatbot.
 
-Cookie (grey/black classic tabby, white chest/muzzle/paws) sits on or near the frontmost window as a photo-cutout overlay. She is sometimes in the way on purpose. Drag her or keep typing and she slides off. Panic-hide is the backup. Menu bar has **Quit for today** and **Mute**. The app registers itself to launch at login.
+Cookie (grey/black classic tabby, white chest/muzzle/paws) is a photo-cutout overlay. v1.1 she lives in the **lower-right corner of the main screen** and roams / pose-swaps there. Click makes her dash to another spot in that corner and talk. Panic-hide is the menu backup. Menu bar has **Quit for today** and **Mute**. The app registers itself to launch at login.
 
 Mac only. Native Swift + AppKit. One job.
 
@@ -29,19 +29,21 @@ Ad-hoc signing (`CODE_SIGN_IDENTITY = "-"`) is enough to run locally. Set your D
 
 | Item | What it does |
 | --- | --- |
-| Panic hide | Cookie vanishes for ~20s, then comes back on a new perch |
-| Mute / Muted | Toggle. Soft rare stub sound (`Assets/Sounds/cookie_soft.wav`) |
+| Panic hide | Cookie vanishes for ~20s, then comes back in the right-corner habitat |
+| Mute / Muted | Toggle. Soft rare stub sound **and** click speech bubbles |
 | Quit for today | Quits. She returns at the next login |
 
-### Shoo
+### Motion and click (v1.1)
 
-- Drag the fur (transparent pixels click through).
-- Type while she is sitting on the window you are using — a few keys and she slides off.
-- Panic hide from the menu if she will not move.
+- Habitat is the lower-right of `NSScreen.main.visibleFrame` only. No whole-desktop roam.
+- Idle: pace / pose-swap among the six signed photo cutouts.
+- Click Cookie: dash to another point **inside** that corner. Does not hide.
+- Short speech bubble (cooldown). Mute hides bubbles too.
+- Panic hide stays on the menu only.
 
-### Accessibility (optional)
+### Accessibility
 
-Type-through also uses a global key monitor when macOS allows it. Drag + panic hide work without that permission. Window sitting uses `CGWindowList` (no Accessibility prompt).
+Not required for v1.1 habitat roam or click-dash.
 
 ## Layout
 
@@ -59,8 +61,8 @@ Canonical Mac source for the six PNGs:
 
 `/Users/ashling/Desktop/Grok Local/Cookie Soul/sprites/`
 
-Live pose starts on `cookie_sit` or `cookie_alert`. Placement is by **feet anchor** on a dock or window edge — never centered on the display. About a quarter of perches overlap the content you are looking at.
+Live pose starts on `cookie_sit` or `cookie_alert`. Clamp the full overlay into the main-screen lower-right habitat.
 
-## Out of scope (v1)
+## Out of scope
 
-No chat companion. No Windows/Linux. No new behaviors. No sprite redesign.
+No chat companion. No Windows/Linux. No pixelate / pixel-art / illustrated Cookie. No sprite redesign.

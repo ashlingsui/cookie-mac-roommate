@@ -6,7 +6,7 @@ Canonical Mac source:
 
 `/Users/ashling/Desktop/Grok Local/Cookie Soul/sprites/`
 
-Ship these exact files in `Assets/Sprites/`. The app positions each pose by its **feet anchor**, not by centering the bitmap on the display.
+Ship these exact files in `Assets/Sprites/`. v1.1 clamps the full overlay into the **lower-right habitat** of `NSScreen.main.visibleFrame`. Feet anchors still decide how the bitmap sits inside that frame. Do not pixelate or redraw these cutouts.
 
 ## Table
 

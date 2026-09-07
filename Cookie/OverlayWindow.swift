@@ -73,7 +73,8 @@ final class SpriteView: NSView {
 
     var onDragBegan: (() -> Void)?
     var onDragMoved: ((NSPoint) -> Void)?
-    var onDragEnded: ((CGVector) -> Void)?
+    var onDragEnded: (() -> Void)?
+    var onClicked: (() -> Void)?
 
     private var dragStartScreen: NSPoint?
     private var lastDragScreen: NSPoint?
@@ -121,13 +122,15 @@ final class SpriteView: NSView {
     }
 
     override func mouseUp(with event: NSEvent) {
-        guard let last = lastDragScreen, let start = dragStartScreen else { return }
-        let dt = max(0.016, ProcessInfo.processInfo.systemUptime - lastDragTime)
-        let delta = CGVector(dx: (NSEvent.mouseLocation.x - last.x) / dt, dy: (NSEvent.mouseLocation.y - last.y) / dt)
+        guard let start = dragStartScreen else { return }
         let travel = hypot(NSEvent.mouseLocation.x - start.x, NSEvent.mouseLocation.y - start.y)
         dragStartScreen = nil
         lastDragScreen = nil
-        onDragEnded?(travel > 8 ? delta : .zero)
+        if travel <= 8 {
+            onClicked?()
+        } else {
+            onDragEnded?()
+        }
     }
 
     override func hitTest(_ point: NSPoint) -> NSView? {

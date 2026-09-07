@@ -1,23 +1,18 @@
 import AppKit
-import CoreGraphics
 
 final class RoommateController {
     private let window = OverlayWindow()
     private let spriteView = SpriteView()
+    private let bubble = SpeechBubble()
     private var pose: Pose
-    private var perchTimer: Timer?
+    private var roamTimer: Timer?
     private var returnTimer: Timer?
-    private var keyMonitor: Any?
-    private var localKeyMonitor: Any?
-    private var typePulse: Timer?
-    private var typeHits = 0
-    private var typeWindowStart = Date.distantPast
-    private var lastSeenKeyAge: CFTimeInterval = .greatestFiniteMagnitude
     private var hiddenUntil: Date?
-    private var lastFrontFrame: CGRect = .zero
     private var isDragging = false
-    /// HID key-age pulse will otherwise shoo Cookie the instant launch sees leftover typing.
-    private var shooAllowedAt = Date.distantFuture
+    private var isBusy = false
+    private var pendingBubble = false
+    /// Hold still on first sit so launch is visible before idle roam starts.
+    private var roamAllowedAt = Date.distantFuture
 
     init() {
         pose = Pose.randomIdle()
@@ -28,36 +23,27 @@ final class RoommateController {
             self?.window.ignoresMouseEvents = false
         }
         spriteView.onDragMoved = { [weak self] screen in self?.followDrag(screen) }
-        spriteView.onDragEnded = { [weak self] velocity in self?.finishDrag(velocity) }
+        spriteView.onDragEnded = { [weak self] in self?.finishDrag() }
+        spriteView.onClicked = { [weak self] in self?.clicked() }
     }
 
     func start() {
         apply(pose: pose)
         window.startClickThroughTracking()
-        sitOnNewPerch(animated: false, guaranteed: true)
-        lastFrontFrame = frontmostFrame()
-        shooAllowedAt = Date().addingTimeInterval(4)
-        watchFrontWindow()
-        watchTyping()
+        goTo(Habitat.randomFrame(size: pose.displaySize()), animated: false, dash: false)
+        roamAllowedAt = Date().addingTimeInterval(4)
+        watchIdle()
         SoundPlayer.shared.start()
     }
 
     deinit {
-        if let keyMonitor { NSEvent.removeMonitor(keyMonitor) }
-        if let localKeyMonitor { NSEvent.removeMonitor(localKeyMonitor) }
-        typePulse?.invalidate()
-        perchTimer?.invalidate()
+        roamTimer?.invalidate()
         returnTimer?.invalidate()
     }
 
     func panicHide() {
-        hideOffscreen(reason: "panic")
-    }
-
-    func revealIfHidden() {
-        hiddenUntil = nil
-        returnTimer?.invalidate()
-        sitOnNewPerch(animated: false, guaranteed: true)
+        bubble.hide()
+        hideOffscreen()
     }
 
     var isVisible: Bool {
@@ -70,32 +56,25 @@ final class RoommateController {
         let size = pose.displaySize()
         var frame = window.frame
         frame.size = size
-        window.setFrame(frame, display: true)
+        window.setFrame(Habitat.clampFrame(frame), display: true)
     }
 
-    private func sitOnNewPerch(animated: Bool, guaranteed: Bool = false) {
+    private func goTo(_ desired: NSRect, animated: Bool, dash: Bool) {
         hiddenUntil = nil
-        let size = pose.displaySize()
-        let perch = guaranteed
-            ? PerchFinder.guaranteedDockPerch(displaySize: size)
-            : PerchFinder.next(displaySize: size)
-        let feet = pose.feetOffset(displaySize: size)
-        let desired = NSRect(
-            origin: NSPoint(x: perch.feet.x - feet.x, y: perch.feet.y - feet.y),
-            size: size
-        )
-        let frame = PerchFinder.onscreenFrame(desired, preferred: perch.screen)
-        present(frame: frame, animated: animated)
+        let frame = Habitat.clampFrame(desired)
+        present(frame: frame, animated: animated, dash: dash)
     }
 
-    private func present(frame: NSRect, animated: Bool) {
+    private func present(frame: NSRect, animated: Bool, dash: Bool) {
         window.alphaValue = 1
         if animated {
+            isBusy = true
             NSAnimationContext.runAnimationGroup { ctx in
-                ctx.duration = 0.28
-                ctx.timingFunction = CAMediaTimingFunction(name: .easeOut)
+                ctx.duration = dash ? 0.18 : 0.45
+                ctx.timingFunction = CAMediaTimingFunction(name: dash ? .easeInEaseOut : .easeInEaseOut)
                 window.animator().setFrame(frame, display: true)
             } completionHandler: { [weak self] in
+                self?.isBusy = false
                 self?.finishPresent()
             }
         } else {
@@ -106,6 +85,7 @@ final class RoommateController {
 
     private func finishPresent() {
         window.alphaValue = 1
+        window.setFrame(Habitat.clampFrame(window.frame), display: true)
         window.orderFrontRegardless()
         if !window.isVisible {
             NSLog("Cookie: overlay not visible after sit; retrying orderFrontRegardless")
@@ -114,173 +94,73 @@ final class RoommateController {
         if !window.isVisible {
             NSLog("Cookie: overlay still not visible (frame \(NSStringFromRect(window.frame)))")
         }
-    }
-
-    private func watchFrontWindow() {
-        perchTimer?.invalidate()
-        perchTimer = Timer.scheduledTimer(withTimeInterval: 2.4, repeats: true) { [weak self] _ in
-            self?.reconsiderPerch()
+        if pendingBubble {
+            pendingBubble = false
+            bubble.show(near: window.frame)
         }
-        perchTimer?.tolerance = 0.4
     }
 
-    private func reconsiderPerch() {
-        if Date() < shooAllowedAt { return }
+    private func watchIdle() {
+        roamTimer?.invalidate()
+        roamTimer = Timer.scheduledTimer(withTimeInterval: 6.5, repeats: true) { [weak self] _ in
+            self?.idleStep()
+        }
+        roamTimer?.tolerance = 0.8
+    }
+
+    /// Roam / pace / pose-swap inside the right-corner habitat only.
+    private func idleStep() {
+        if Date() < roamAllowedAt { return }
         if let until = hiddenUntil, Date() < until { return }
-        if isDragging { return }
+        if isDragging || isBusy { return }
 
-        let size = pose.displaySize()
-        let perch = PerchFinder.next(displaySize: size)
-        let front = frontmostFrame()
-        let windowMoved = hypot(front.midX - lastFrontFrame.midX, front.midY - lastFrontFrame.midY) > 80
-            || abs(front.width - lastFrontFrame.width) > 80
-        lastFrontFrame = front
-
-        if windowMoved {
-            // New front window: pick a fresh idle pose sometimes, then sit on it.
-            if Bool.random() {
-                apply(pose: Pose.randomIdle())
-            }
-            sitOnNewPerch(animated: true)
-            return
+        if Bool.random() {
+            apply(pose: Pose.random(excluding: pose))
         }
-
-        // Stay put unless we drifted far from any useful perch.
-        let feet = currentFeet()
-        if hypot(feet.x - perch.feet.x, feet.y - perch.feet.y) > 900 {
-            sitOnNewPerch(animated: true)
-        }
+        goTo(
+            Habitat.randomFrame(size: pose.displaySize(), avoiding: window.frame),
+            animated: true,
+            dash: false
+        )
     }
 
-    private func watchTyping() {
-        // Accessibility is optional. Polling HID key age works without it;
-        // the global monitor fires too if the user later grants trust.
-        typePulse = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { [weak self] _ in
-            self?.pulseTyping()
-        }
-        keyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] _ in
-            self?.noteTyped()
-        }
-        localKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            self?.noteTyped()
-            return event
-        }
-    }
-
-    private func pulseTyping() {
-        guard Date() >= shooAllowedAt else {
-            lastSeenKeyAge = .greatestFiniteMagnitude
-            return
-        }
-        let age = CGEventSource.secondsSinceLastEventType(.hidSystemState, eventType: .keyDown)
-        if age < 0.28 && age < lastSeenKeyAge {
-            noteTyped()
-        }
-        lastSeenKeyAge = age
-    }
-
-    /// Type-through: keys still go to the app underneath; Cookie just slides off.
-    private func noteTyped() {
-        guard Date() >= shooAllowedAt else { return }
+    /// Click does not hide. Dash to another habitat point and (if unmuted) talk.
+    private func clicked() {
         if let until = hiddenUntil, Date() < until { return }
-        if isDragging { return }
-        guard window.alphaValue > 0.2 else { return }
-
-        let now = Date()
-        if now.timeIntervalSince(typeWindowStart) > 1.6 {
-            typeHits = 0
-            typeWindowStart = now
-        }
-        typeHits += 1
-        if typeHits >= 4 {
-            typeHits = 0
-            shoveAside()
-        }
+        if isBusy { return }
+        pendingBubble = true
+        apply(pose: Pose.random(excluding: pose))
+        goTo(
+            Habitat.randomFrame(size: pose.displaySize(), avoiding: window.frame),
+            animated: true,
+            dash: true
+        )
     }
 
     private func followDrag(_ screen: NSPoint) {
         let size = window.frame.size
         let feet = pose.feetOffset(displaySize: size)
         let origin = NSPoint(x: screen.x - feet.x, y: screen.y - feet.y)
-        window.setFrame(NSRect(origin: origin, size: size), display: true)
+        window.setFrame(Habitat.clampFrame(NSRect(origin: origin, size: size)), display: true)
     }
 
-    private func finishDrag(_ velocity: CGVector) {
+    private func finishDrag() {
         isDragging = false
         window.lockMouse = false
         window.syncClickThrough()
-        let speed = hypot(velocity.dx, velocity.dy)
-        if speed > 40 {
-            slideOff(direction: velocity)
-        } else {
-            shoveAside()
-        }
+        window.setFrame(Habitat.clampFrame(window.frame), display: true)
+        window.orderFrontRegardless()
     }
 
-    private func shoveAside() {
-        let dir = CGVector(dx: Bool.random() ? 420 : -420, dy: CGFloat.random(in: -40...80))
-        slideOff(direction: dir)
-    }
-
-    private func slideOff(direction: CGVector) {
-        var dx = direction.dx
-        var dy = direction.dy
-        let mag = max(1, hypot(dx, dy))
-        dx = dx / mag * 520
-        dy = dy / mag * 180
-        var frame = window.frame
-        frame.origin.x += dx
-        frame.origin.y += dy
-        NSAnimationContext.runAnimationGroup { ctx in
-            ctx.duration = 0.32
-            ctx.timingFunction = CAMediaTimingFunction(name: .easeIn)
-            window.animator().setFrame(frame, display: true)
-            window.animator().alphaValue = 0
-        } completionHandler: { [weak self] in
-            self?.hideOffscreen(reason: "shoo")
-        }
-    }
-
-    private func hideOffscreen(reason: String) {
+    private func hideOffscreen() {
         window.alphaValue = 0
         window.orderOut(nil)
-        let pause: TimeInterval = reason == "panic" ? 22 : TimeInterval.random(in: 7...14)
-        hiddenUntil = Date().addingTimeInterval(pause)
+        hiddenUntil = Date().addingTimeInterval(22)
         returnTimer?.invalidate()
-        returnTimer = Timer.scheduledTimer(withTimeInterval: pause, repeats: false) { [weak self] _ in
+        returnTimer = Timer.scheduledTimer(withTimeInterval: 22, repeats: false) { [weak self] _ in
             guard let self else { return }
-            self.apply(pose: Pose.random(excluding: self.pose))
-            if self.pose.isDefaultIdle == false && Bool.random() {
-                self.apply(pose: Pose.randomIdle())
-            }
-            self.sitOnNewPerch(animated: false)
+            self.apply(pose: Pose.randomIdle())
+            self.goTo(Habitat.randomFrame(size: self.pose.displaySize()), animated: false, dash: false)
         }
-    }
-
-    private func currentFeet() -> NSPoint {
-        let feet = pose.feetOffset(displaySize: window.frame.size)
-        return NSPoint(x: window.frame.minX + feet.x, y: window.frame.minY + feet.y)
-    }
-
-    private func frontmostFrame() -> CGRect {
-        let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
-        guard let info = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
-            return .zero
-        }
-        for window in info {
-            let layer = window[kCGWindowLayer as String] as? Int ?? 0
-            if layer != 0 { continue }
-            let owner = window[kCGWindowOwnerName as String] as? String ?? ""
-            if owner == "Cookie" { continue }
-            if let bounds = window[kCGWindowBounds as String] as? [String: CGFloat] {
-                return CGRect(
-                    x: bounds["X"] ?? 0,
-                    y: bounds["Y"] ?? 0,
-                    width: bounds["Width"] ?? 0,
-                    height: bounds["Height"] ?? 0
-                )
-            }
-        }
-        return .zero
     }
 }
