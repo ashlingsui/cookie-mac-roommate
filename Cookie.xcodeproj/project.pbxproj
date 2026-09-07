@@ -15,6 +15,7 @@
 		A10000000000000100000006 /* OverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000006 /* OverlayWindow.swift */; };
 		A10000000000000100000007 /* RoommateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000007 /* RoommateController.swift */; };
 		A10000000000000100000008 /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000008 /* StatusItemController.swift */; };
+		A10000000000000100000009 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000100000009 /* main.swift */; };
 		A20000000000000100000001 /* cookie_sleep.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000001 /* cookie_sleep.png */; };
 		A20000000000000100000002 /* cookie_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000002 /* cookie_alert.png */; };
 		A20000000000000100000003 /* cookie_sit.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000003 /* cookie_sit.png */; };
@@ -34,6 +35,7 @@
 		B10000000000000100000006 /* OverlayWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindow.swift; sourceTree = "<group>"; };
 		B10000000000000100000007 /* RoommateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoommateController.swift; sourceTree = "<group>"; };
 		B10000000000000100000008 /* StatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
+		B10000000000000100000009 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C10000000000000100000001 /* cookie_sleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_sleep.png; sourceTree = "<group>"; };
 		C10000000000000100000002 /* cookie_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_alert.png; sourceTree = "<group>"; };
 		C10000000000000100000003 /* cookie_sit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_sit.png; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 		F10000000000000100000002 /* Cookie */ = {
 			isa = PBXGroup;
 			children = (
+				B10000000000000100000009 /* main.swift */,
 				B10000000000000100000001 /* AppDelegate.swift */,
 				B10000000000000100000007 /* RoommateController.swift */,
 				B10000000000000100000006 /* OverlayWindow.swift */,
@@ -193,6 +196,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000100000009 /* main.swift in Sources */,
 				A10000000000000100000001 /* AppDelegate.swift in Sources */,
 				A10000000000000100000002 /* Pose.swift in Sources */,
 				A10000000000000100000003 /* LoginItem.swift in Sources */,
