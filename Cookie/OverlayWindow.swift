@@ -19,9 +19,10 @@ final class OverlayWindow: NSPanel {
         isOpaque = false
         backgroundColor = .clear
         hasShadow = false
-        level = NSWindow.Level(rawValue: NSWindow.Level.floating.rawValue + 2)
-        collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
+        isReleasedWhenClosed = false
         hidesOnDeactivate = false
+        level = NSWindow.Level(rawValue: NSWindow.Level.floating.rawValue + 2)
+        collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .ignoresCycle]
         isFloatingPanel = true
         becomesKeyOnlyIfNeeded = false
         animationBehavior = .none
@@ -29,6 +30,7 @@ final class OverlayWindow: NSPanel {
         isMovableByWindowBackground = false
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
+        worksWhenModal = true
     }
 
     func startClickThroughTracking() {

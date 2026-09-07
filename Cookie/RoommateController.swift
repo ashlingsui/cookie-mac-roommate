@@ -16,6 +16,8 @@ final class RoommateController {
     private var hiddenUntil: Date?
     private var lastFrontFrame: CGRect = .zero
     private var isDragging = false
+    /// HID key-age pulse will otherwise shoo Cookie the instant launch sees leftover typing.
+    private var shooAllowedAt = Date.distantFuture
 
     init() {
         pose = Pose.randomIdle()
@@ -32,7 +34,9 @@ final class RoommateController {
     func start() {
         apply(pose: pose)
         window.startClickThroughTracking()
-        sitOnNewPerch(animated: false)
+        sitOnNewPerch(animated: false, guaranteed: true)
+        lastFrontFrame = frontmostFrame()
+        shooAllowedAt = Date().addingTimeInterval(4)
         watchFrontWindow()
         watchTyping()
         SoundPlayer.shared.start()
@@ -53,7 +57,7 @@ final class RoommateController {
     func revealIfHidden() {
         hiddenUntil = nil
         returnTimer?.invalidate()
-        sitOnNewPerch(animated: false)
+        sitOnNewPerch(animated: false, guaranteed: true)
     }
 
     var isVisible: Bool {
@@ -69,23 +73,46 @@ final class RoommateController {
         window.setFrame(frame, display: true)
     }
 
-    private func sitOnNewPerch(animated: Bool) {
+    private func sitOnNewPerch(animated: Bool, guaranteed: Bool = false) {
         hiddenUntil = nil
         let size = pose.displaySize()
-        let perch = PerchFinder.next(displaySize: size)
+        let perch = guaranteed
+            ? PerchFinder.guaranteedDockPerch(displaySize: size)
+            : PerchFinder.next(displaySize: size)
         let feet = pose.feetOffset(displaySize: size)
-        let origin = NSPoint(x: perch.feet.x - feet.x, y: perch.feet.y - feet.y)
-        let frame = NSRect(origin: origin, size: size)
+        let desired = NSRect(
+            origin: NSPoint(x: perch.feet.x - feet.x, y: perch.feet.y - feet.y),
+            size: size
+        )
+        let frame = PerchFinder.onscreenFrame(desired, preferred: perch.screen)
+        present(frame: frame, animated: animated)
+    }
+
+    private func present(frame: NSRect, animated: Bool) {
         window.alphaValue = 1
-        window.orderFrontRegardless()
         if animated {
             NSAnimationContext.runAnimationGroup { ctx in
                 ctx.duration = 0.28
                 ctx.timingFunction = CAMediaTimingFunction(name: .easeOut)
                 window.animator().setFrame(frame, display: true)
+            } completionHandler: { [weak self] in
+                self?.finishPresent()
             }
         } else {
             window.setFrame(frame, display: true)
+            finishPresent()
+        }
+    }
+
+    private func finishPresent() {
+        window.alphaValue = 1
+        window.orderFrontRegardless()
+        if !window.isVisible {
+            NSLog("Cookie: overlay not visible after sit; retrying orderFrontRegardless")
+            window.orderFrontRegardless()
+        }
+        if !window.isVisible {
+            NSLog("Cookie: overlay still not visible (frame \(NSStringFromRect(window.frame)))")
         }
     }
 
@@ -98,6 +125,7 @@ final class RoommateController {
     }
 
     private func reconsiderPerch() {
+        if Date() < shooAllowedAt { return }
         if let until = hiddenUntil, Date() < until { return }
         if isDragging { return }
 
@@ -140,6 +168,10 @@ final class RoommateController {
     }
 
     private func pulseTyping() {
+        guard Date() >= shooAllowedAt else {
+            lastSeenKeyAge = .greatestFiniteMagnitude
+            return
+        }
         let age = CGEventSource.secondsSinceLastEventType(.hidSystemState, eventType: .keyDown)
         if age < 0.28 && age < lastSeenKeyAge {
             noteTyped()
@@ -149,6 +181,7 @@ final class RoommateController {
 
     /// Type-through: keys still go to the app underneath; Cookie just slides off.
     private func noteTyped() {
+        guard Date() >= shooAllowedAt else { return }
         if let until = hiddenUntil, Date() < until { return }
         if isDragging { return }
         guard window.alphaValue > 0.2 else { return }

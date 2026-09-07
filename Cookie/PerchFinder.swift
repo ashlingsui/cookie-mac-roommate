@@ -1,7 +1,6 @@
 import AppKit
 import CoreGraphics
 
-
 struct Perch {
     /// Screen-space point the sprite's feet should sit on.
     let feet: NSPoint
@@ -14,7 +13,47 @@ enum PerchFinder {
         if let window = frontmostWorkWindow(on: screen) {
             return perch(onWindow: window, displaySize: displaySize, screen: screen)
         }
+        return guaranteedDockPerch(displaySize: displaySize)
+    }
+
+    /// Visible dock / bottom of `NSScreen.main` — first-sit fallback that cannot miss every display.
+    static func guaranteedDockPerch(displaySize: NSSize) -> Perch {
+        let screen = NSScreen.main ?? NSScreen.screens[0]
         return dockOrDesktopPerch(displaySize: displaySize, screen: screen)
+    }
+
+    /// Keep the full overlay frame inside a screen's visible area (not just the feet point).
+    static func clampWindowFrame(_ frame: NSRect, to screen: NSScreen) -> NSRect {
+        let vis = screen.visibleFrame
+        var f = frame
+        if f.width >= vis.width {
+            f.origin.x = vis.minX
+        } else {
+            f.origin.x = min(max(f.origin.x, vis.minX), vis.maxX - f.width)
+        }
+        if f.height >= vis.height {
+            f.origin.y = vis.minY
+        } else {
+            f.origin.y = min(max(f.origin.y, vis.minY), vis.maxY - f.height)
+        }
+        return f
+    }
+
+    /// If `desired` would miss every display (stacked dual-display math), pin to main visibleFrame.
+    static func onscreenFrame(_ desired: NSRect, preferred: NSScreen) -> NSRect {
+        let onPreferred = clampWindowFrame(desired, to: preferred)
+        if intersectsAnyVisibleScreen(onPreferred) {
+            return onPreferred
+        }
+        let main = NSScreen.main ?? preferred
+        let onMain = clampWindowFrame(desired, to: main)
+        if intersectsAnyVisibleScreen(onMain) {
+            return onMain
+        }
+        return clampWindowFrame(
+            NSRect(origin: main.visibleFrame.origin, size: desired.size),
+            to: main
+        )
     }
 
     /// Cat-honest: often an edge, sometimes on the content the user is looking at.
@@ -51,15 +90,10 @@ enum PerchFinder {
 
     private static func dockOrDesktopPerch(displaySize: NSSize, screen: NSScreen) -> Perch {
         let visible = screen.visibleFrame
-        let frame = screen.frame
-        let dockOnBottom = visible.minY > frame.minY + 8
-        let x = CGFloat.random(in: (visible.minX + 40)...max(visible.minX + 41, visible.maxX - 40))
-        let y: CGFloat
-        if dockOnBottom {
-            y = visible.minY + 2
-        } else {
-            y = visible.minY + 10
-        }
+        let xLow = visible.minX + 40
+        let xHigh = max(xLow + 1, visible.maxX - 40)
+        let x = CGFloat.random(in: xLow...xHigh)
+        let y = visible.minY + 8
         return Perch(feet: clampFeet(NSPoint(x: x, y: y), displaySize: displaySize, screen: screen), screen: screen)
     }
 
@@ -70,6 +104,11 @@ enum PerchFinder {
             x: min(max(feet.x, vis.minX + pad), vis.maxX - pad),
             y: min(max(feet.y, vis.minY + pad), vis.maxY - pad)
         )
+    }
+
+    private static func intersectsAnyVisibleScreen(_ frame: NSRect) -> Bool {
+        let probe = frame.insetBy(dx: 2, dy: 2)
+        return NSScreen.screens.contains { $0.visibleFrame.intersects(probe) }
     }
 
     private static func frontmostWorkWindow(on screen: NSScreen) -> CGRect? {
@@ -87,7 +126,6 @@ enum PerchFinder {
             if owner == "Cookie" || owner == "Window Server" || owner == "Dock" { continue }
 
             guard let bounds = window[kCGWindowBounds as String] as? [String: CGFloat] else { continue }
-            // Quartz coords are top-left; convert to AppKit bottom-left.
             let q = CGRect(
                 x: bounds["X"] ?? 0,
                 y: bounds["Y"] ?? 0,
@@ -103,13 +141,15 @@ enum PerchFinder {
         return nil
     }
 
+    /// CGWindowList: (0, 0) is the top-left of the primary display (AppKit origin-zero screen); y grows down.
+    /// AppKit: (0, 0) is the bottom-left of that same display; y grows up.
+    /// Using the union of all `maxY`s is wrong when a second display is stacked above the primary
+    /// (e.g. Color LCD at (0,0,1470,956) + Dell at (0,956,2560,1440)).
     private static func quartzToAppKit(_ rect: CGRect) -> CGRect {
-        guard let screen = NSScreen.screens.first else { return rect }
-        // Combined display space: Quartz y grows down from the top of the primary-origin space.
-        let globalHeight = NSScreen.screens.map(\.frame.maxY).max() ?? screen.frame.maxY
+        let primary = NSScreen.screens.first { $0.frame.origin == .zero } ?? NSScreen.screens[0]
         return CGRect(
             x: rect.origin.x,
-            y: globalHeight - rect.origin.y - rect.height,
+            y: primary.frame.maxY - rect.origin.y - rect.height,
             width: rect.width,
             height: rect.height
         )

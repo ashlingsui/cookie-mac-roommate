@@ -8,14 +8,19 @@ final class StatusItemController {
     init(roommate: RoommateController) {
         self.roommate = roommate
         item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        item.isVisible = true
         if let button = item.button {
-            if #available(macOS 11.0, *) {
-                button.image = NSImage(systemSymbolName: "cat", accessibilityDescription: "Cookie")
-            }
-            if button.image == nil {
-                button.title = "Cookie"
-            }
+            // Always a readable title. Do not rely on SF Symbol "cat" (missing on some OS builds,
+            // and a non-nil empty image would skip the old title fallback).
+            button.title = "Cookie"
             button.toolTip = "Cookie"
+            if #available(macOS 11.0, *) {
+                if let paw = NSImage(systemSymbolName: "pawprint.fill", accessibilityDescription: "Cookie") {
+                    paw.isTemplate = true
+                    button.image = paw
+                    button.imagePosition = .imageLeading
+                }
+            }
         }
 
         muteItem = NSMenuItem(title: "Mute", action: #selector(toggleMute), keyEquivalent: "")

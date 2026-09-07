@@ -20,7 +20,7 @@ This repo is a complete Xcode project. The Linux cloud VM cannot run the overlay
    That copies from `/Users/ashling/Desktop/Grok Local/Cookie Soul/sprites/`. Override with `COOKIE_SPRITES=/path ./scripts/import-sprites.sh` if the folder moved.
 3. Open `Cookie.xcodeproj` in Xcode 15+ (macOS 13 Ventura or later).
 4. Select the **Cookie** scheme, destination **My Mac**.
-5. Press Run (⌘R). Cookie has no Dock icon (`LSUIElement`). Look at the menu bar for the cat / “Cookie” item.
+5. Press Run (⌘R). Cookie has no Dock icon (`LSUIElement`). The menu bar item always reads **Cookie** (optional paw icon).
 6. To keep her after you quit Xcode: Product → Archive, or drag the built `Cookie.app` from Products into `/Applications`, then launch it once so login registration sticks.
 
 Ad-hoc signing (`CODE_SIGN_IDENTITY = "-"`) is enough to run locally. Set your Development Team in the Cookie target if you want a stable notarized build.
