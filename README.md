@@ -48,7 +48,7 @@ Type-through also uses a global key monitor when macOS allows it. Drag + panic h
 ```
 Assets/Sprites/          approved PNG cutouts, _meta.json, ENGINEER_HANDOFF.md
 Assets/Sounds/           quiet stub wav (muteable)
-Cookie/                  AppKit sources
+Cookie/                  AppKit sources (`main.swift` assigns `NSApp.delegate` — required)
 Cookie.xcodeproj/        Xcode project + shared scheme
 scripts/import-sprites.sh
 ```
