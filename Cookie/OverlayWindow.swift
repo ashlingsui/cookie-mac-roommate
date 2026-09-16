@@ -75,12 +75,15 @@ final class SpriteView: NSView {
     var onDragMoved: ((NSPoint) -> Void)?
     var onDragEnded: (() -> Void)?
     var onClicked: (() -> Void)?
+    var onDoubleClicked: (() -> Void)?
     /// Box mode: photo suitcase stays put; click still comes out.
     var allowsDrag = true
 
     private var dragStartScreen: NSPoint?
     private var lastDragScreen: NSPoint?
     private var lastDragTime: TimeInterval = 0
+    private var pendingClickWork: DispatchWorkItem?
+    private let singleClickDelay: TimeInterval = 0.28
 
     override var isOpaque: Bool { false }
     override var wantsDefaultClipping: Bool { false }
@@ -130,11 +133,30 @@ final class SpriteView: NSView {
         let travel = hypot(NSEvent.mouseLocation.x - start.x, NSEvent.mouseLocation.y - start.y)
         dragStartScreen = nil
         lastDragScreen = nil
-        if travel <= 8 {
-            onClicked?()
-        } else if allowsDrag {
-            onDragEnded?()
+        // Always end drag so isDragging cannot stick after a click.
+        onDragEnded?()
+        guard travel <= 8 else { return }
+        if event.clickCount >= 2 {
+            cancelPendingClick()
+            onDoubleClicked?()
+            return
         }
+        cancelPendingClick()
+        let work = DispatchWorkItem { [weak self] in
+            self?.pendingClickWork = nil
+            self?.onClicked?()
+        }
+        pendingClickWork = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + singleClickDelay, execute: work)
+    }
+
+    private func cancelPendingClick() {
+        pendingClickWork?.cancel()
+        pendingClickWork = nil
+    }
+
+    deinit {
+        cancelPendingClick()
     }
 
     override func hitTest(_ point: NSPoint) -> NSView? {

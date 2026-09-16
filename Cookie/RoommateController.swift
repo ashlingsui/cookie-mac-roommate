@@ -32,6 +32,7 @@ final class RoommateController {
         spriteView.onDragMoved = { [weak self] screen in self?.followDrag(screen) }
         spriteView.onDragEnded = { [weak self] in self?.finishDrag() }
         spriteView.onClicked = { [weak self] in self?.clicked() }
+        spriteView.onDoubleClicked = { [weak self] in self?.doubleClicked() }
     }
 
     func start() {
@@ -207,6 +208,19 @@ final class RoommateController {
             animated: true,
             dash: true
         )
+    }
+
+    /// Double-click is Hide in box (or come out if already boxed). Do not early-return on isBusy.
+    private func doubleClicked() {
+        if let until = hiddenUntil, Date() < until { return }
+        isBusy = false
+        pendingBubble = false
+        pendingBubbleLines = nil
+        if isInBox {
+            comeOut()
+        } else {
+            hideInBox()
+        }
     }
 
     private func followDrag(_ screen: NSPoint) {
