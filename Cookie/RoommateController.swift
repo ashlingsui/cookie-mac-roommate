@@ -46,6 +46,12 @@ final class RoommateController {
         hideOffscreen()
     }
 
+    /// Persist a Size-menu scale and resize the current pose in place.
+    func setSpriteScale(_ scale: CGFloat) {
+        SpriteScale.current = scale
+        apply(pose: pose)
+    }
+
     var isVisible: Bool {
         hiddenUntil == nil && window.isVisible
     }

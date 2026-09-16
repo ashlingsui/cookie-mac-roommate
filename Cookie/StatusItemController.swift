@@ -4,6 +4,7 @@ final class StatusItemController {
     private let item: NSStatusItem
     private let roommate: RoommateController
     private let muteItem: NSMenuItem
+    private var sizeItems: [NSMenuItem] = []
 
     init(roommate: RoommateController) {
         self.roommate = roommate
@@ -35,9 +36,38 @@ final class StatusItemController {
 
         menu.addItem(hide)
         menu.addItem(muteItem)
+        menu.addItem(makeSizeMenuItem())
         menu.addItem(.separator())
         menu.addItem(quit)
         item.menu = menu
+    }
+
+    private func makeSizeMenuItem() -> NSMenuItem {
+        let root = NSMenuItem(title: "Size", action: nil, keyEquivalent: "")
+        let submenu = NSMenu()
+        for option in SpriteScale.options {
+            let item = NSMenuItem(title: option.title, action: #selector(setScale(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = Double(option.value)
+            item.state = SpriteScale.matches(option.value) ? .on : .off
+            submenu.addItem(item)
+            sizeItems.append(item)
+        }
+        root.submenu = submenu
+        return root
+    }
+
+    private func refreshSizeMenu() {
+        for item in sizeItems {
+            let value = (item.representedObject as? Double).map { CGFloat($0) }
+            item.state = (value.map { SpriteScale.matches($0) } ?? false) ? .on : .off
+        }
+    }
+
+    @objc private func setScale(_ sender: NSMenuItem) {
+        guard let value = sender.representedObject as? Double else { return }
+        roommate.setSpriteScale(CGFloat(value))
+        refreshSizeMenu()
     }
 
     @objc private func toggleMute() {

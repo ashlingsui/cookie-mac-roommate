@@ -2,7 +2,7 @@
 
 Mac desktop roommate that puts my cat on your screen while you work — cat-honest presence, muteable sounds, muteable bratty bubbles. Not a chatbot.
 
-Cookie (grey/black classic tabby, white chest/muzzle/paws) is a photo-cutout overlay. v1.1 she lives in the **lower-right corner of the main screen** and roams / pose-swaps there. Click makes her dash to another spot in that corner and talk. Panic-hide is the menu backup. Menu bar has **Quit for today** and **Mute**. The app registers itself to launch at login.
+Cookie (grey/black classic tabby, white chest/muzzle/paws) is a photo-cutout overlay. v1.1 she lives in the **lower-right corner of the main screen** and roams / pose-swaps there. Click makes her dash to another spot in that corner and talk. Panic-hide is the menu backup. Menu bar has **Size**, **Quit for today**, and **Mute**. The app registers itself to launch at login.
 
 Mac only. Native Swift + AppKit. One job.
 
@@ -17,7 +17,7 @@ This repo is a complete Xcode project. The Linux cloud VM cannot run the overlay
    ./scripts/import-sprites.sh
    ```
 
-   That copies from `/Users/ashling/Desktop/Grok Local/Cookie Soul/sprites/`. Override with `COOKIE_SPRITES=/path ./scripts/import-sprites.sh` if the folder moved.
+   That copies the Weixin 4-pack from `/Users/ashling/Desktop/Grok Local/Cookie Soul/sprites/`. Override with `COOKIE_SPRITES=/path ./scripts/import-sprites.sh` if the folder moved. This VM does not invent PNG pixels; run the import on the Mac so `Assets/Sprites/` matches the signed sizes in `Pose.swift`.
 3. Open `Cookie.xcodeproj` in Xcode 15+ (macOS 13 Ventura or later).
 4. Select the **Cookie** scheme, destination **My Mac**.
 5. Press Run (⌘R). Cookie has no Dock icon (`LSUIElement`). The menu bar item always reads **Cookie** (optional paw icon).
@@ -31,15 +31,17 @@ Ad-hoc signing (`CODE_SIGN_IDENTITY = "-"`) is enough to run locally. Set your D
 | --- | --- |
 | Panic hide | Cookie vanishes for ~20s, then comes back in the right-corner habitat |
 | Mute / Muted | Toggle. Soft rare stub sound **and** click speech bubbles |
+| Size | Small (0.4) / Medium (0.5, default) / Large (0.75). Persists as `cookie.spriteScale`. Changing size reapplies the current pose immediately |
 | Quit for today | Quits. She returns at the next login |
 
 ### Motion and click (v1.1)
 
 - Habitat is the lower-right of `NSScreen.main.visibleFrame` only. No whole-desktop roam.
-- Idle: pace / pose-swap among the six signed photo cutouts.
+- Idle: pace / pose-swap among the four signed photo cutouts.
 - Click Cookie: dash to another point **inside** that corner. Does not hide.
 - Short speech bubble (cooldown). Mute hides bubbles too.
 - Panic hide stays on the menu only.
+- Default display scale is **0.5** (half the PNG pixel size in points). Roam / dash / clamp use that scaled size.
 
 ### Accessibility
 
@@ -57,11 +59,11 @@ scripts/import-sprites.sh
 
 Sprite table and feet anchors: [`Assets/Sprites/ENGINEER_HANDOFF.md`](Assets/Sprites/ENGINEER_HANDOFF.md).
 
-Canonical Mac source for the six PNGs:
+Canonical Mac source for the four PNGs:
 
 `/Users/ashling/Desktop/Grok Local/Cookie Soul/sprites/`
 
-Live pose starts on `cookie_sit` or `cookie_alert`. Clamp the full overlay into the main-screen lower-right habitat.
+Signed pack: `cookie_sit_eyes_closed.png`, `cookie_loaf.png`, `cookie_sleep.png`, `cookie_alert.png`. Live pose starts on `cookie_sit_eyes_closed` or `cookie_alert`. Clamp the full overlay into the main-screen lower-right habitat.
 
 ## Out of scope
 

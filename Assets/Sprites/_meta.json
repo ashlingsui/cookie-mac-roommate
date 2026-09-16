@@ -1,45 +1,32 @@
 {
   "canonical_source": "/Users/ashling/Desktop/Grok Local/Cookie Soul/sprites/",
-  "note": "Position by feet_anchor_frac on a dock or window edge. Do not center the sprite on the display. Start live pose with cookie_sit or cookie_alert.",
+  "note": "Position by feet_anchor_frac on a dock or window edge. Do not center the sprite on the display. Start live pose with cookie_sit_eyes_closed or cookie_alert. Signed Desktop pack is these 4 PNGs only — cookie_sit.png and cookie_suitcase.png are dropped. Repo PNG pixels may be stale until ./scripts/import-sprites.sh runs on the Mac.",
   "sprites": [
     {
-      "file": "cookie_sleep.png",
-      "pixel_size": [252, 312],
-      "feet_anchor_frac": [0.679, 0.978],
-      "default_idle": false
-    },
-    {
-      "file": "cookie_alert.png",
-      "pixel_size": [248, 310],
-      "feet_anchor_frac": [0.5, 0.987],
+      "file": "cookie_sit_eyes_closed.png",
+      "pixel_size": [182, 320],
+      "feet_anchor_frac": [0.525, 0.997],
       "default_idle": true,
       "note": "Good default idle"
     },
     {
-      "file": "cookie_sit.png",
-      "pixel_size": [209, 330],
-      "feet_anchor_frac": [0.431, 0.997],
-      "default_idle": true,
-      "note": "Approved sit — good default idle"
-    },
-    {
-      "file": "cookie_sit_eyes_closed.png",
-      "pixel_size": [184, 310],
-      "feet_anchor_frac": [0.418, 0.977],
-      "default_idle": false
-    },
-    {
       "file": "cookie_loaf.png",
-      "pixel_size": [309, 310],
-      "feet_anchor_frac": [0.573, 0.974],
+      "pixel_size": [256, 320],
+      "feet_anchor_frac": [0.752, 0.997],
       "default_idle": false
     },
     {
-      "file": "cookie_suitcase.png",
-      "pixel_size": [303, 281],
-      "feet_anchor_frac": [0.139, 0.975],
-      "default_idle": false,
-      "note": "Cookie + case + bandana as one unit. Anchor is bottom-left of the suitcase base."
+      "file": "cookie_sleep.png",
+      "pixel_size": [320, 316],
+      "feet_anchor_frac": [0.522, 0.997],
+      "default_idle": false
+    },
+    {
+      "file": "cookie_alert.png",
+      "pixel_size": [161, 320],
+      "feet_anchor_frac": [0.627, 0.997],
+      "default_idle": true,
+      "note": "Good default idle"
     }
   ]
 }
