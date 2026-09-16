@@ -110,7 +110,8 @@ struct Pose: Equatable {
     }
 
     func displaySize(scale: CGFloat = SpriteScale.current) -> NSSize {
-        NSSize(width: pixelSize.width * scale, height: pixelSize.height * scale)
+        let applied = id == "suitcase" ? scale * 0.5 : scale
+        return NSSize(width: pixelSize.width * applied, height: pixelSize.height * applied)
     }
 
     func loadImage() -> NSImage? {
