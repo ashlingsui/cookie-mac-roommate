@@ -1,6 +1,6 @@
 {
   "canonical_source": "/Users/ashling/Desktop/Grok Local/Cookie Soul/sprites/",
-  "note": "Position by feet_anchor_frac on a dock or window edge. Do not center the sprite on the display. Start live pose with cookie_sit_eyes_closed or cookie_alert. Signed Desktop pack is these 4 PNGs only — cookie_sit.png and cookie_suitcase.png are dropped. Repo PNG pixels may be stale until ./scripts/import-sprites.sh runs on the Mac.",
+  "note": "Position by feet_anchor_frac on a dock or window edge. Do not center the sprite on the display. Start live pose with cookie_sit_eyes_closed or cookie_alert. Signed Desktop pack is these 5 PNGs. cookie_suitcase.png is hide/box only — not in the idle random pool. cookie_sit.png is retired. Repo PNG pixels may be stale until ./scripts/import-sprites.sh runs on the Mac.",
   "sprites": [
     {
       "file": "cookie_sit_eyes_closed.png",
@@ -27,6 +27,13 @@
       "feet_anchor_frac": [0.627, 0.997],
       "default_idle": true,
       "note": "Good default idle"
+    },
+    {
+      "file": "cookie_suitcase.png",
+      "pixel_size": [320, 268],
+      "feet_anchor_frac": [0.383, 0.981],
+      "default_idle": false,
+      "note": "Hide/box only. Photo suitcase. Not in idle random pool."
     }
   ]
 }

@@ -75,6 +75,8 @@ final class SpriteView: NSView {
     var onDragMoved: ((NSPoint) -> Void)?
     var onDragEnded: (() -> Void)?
     var onClicked: (() -> Void)?
+    /// Box mode: photo suitcase stays put; click still comes out.
+    var allowsDrag = true
 
     private var dragStartScreen: NSPoint?
     private var lastDragScreen: NSPoint?
@@ -110,11 +112,13 @@ final class SpriteView: NSView {
         dragStartScreen = NSEvent.mouseLocation
         lastDragScreen = dragStartScreen
         lastDragTime = ProcessInfo.processInfo.systemUptime
-        onDragBegan?()
+        if allowsDrag {
+            onDragBegan?()
+        }
     }
 
     override func mouseDragged(with event: NSEvent) {
-        guard dragStartScreen != nil else { return }
+        guard allowsDrag, dragStartScreen != nil else { return }
         let now = NSEvent.mouseLocation
         onDragMoved?(now)
         lastDragScreen = now
@@ -128,7 +132,7 @@ final class SpriteView: NSView {
         lastDragScreen = nil
         if travel <= 8 {
             onClicked?()
-        } else {
+        } else if allowsDrag {
             onDragEnded?()
         }
     }

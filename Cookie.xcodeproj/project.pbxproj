@@ -21,6 +21,7 @@
 		A20000000000000100000002 /* cookie_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000002 /* cookie_alert.png */; };
 		A20000000000000100000004 /* cookie_sit_eyes_closed.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000004 /* cookie_sit_eyes_closed.png */; };
 		A20000000000000100000005 /* cookie_loaf.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000005 /* cookie_loaf.png */; };
+		A20000000000000100000006 /* cookie_suitcase.png in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000006 /* cookie_suitcase.png */; };
 		A20000000000000100000007 /* _meta.json in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000007 /* _meta.json */; };
 		A20000000000000100000008 /* cookie_soft.wav in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000008 /* cookie_soft.wav */; };
 /* End PBXBuildFile section */
@@ -40,6 +41,7 @@
 		C10000000000000100000002 /* cookie_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_alert.png; sourceTree = "<group>"; };
 		C10000000000000100000004 /* cookie_sit_eyes_closed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_sit_eyes_closed.png; sourceTree = "<group>"; };
 		C10000000000000100000005 /* cookie_loaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_loaf.png; sourceTree = "<group>"; };
+		C10000000000000100000006 /* cookie_suitcase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cookie_suitcase.png; sourceTree = "<group>"; };
 		C10000000000000100000007 /* _meta.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = _meta.json; sourceTree = "<group>"; };
 		C10000000000000100000008 /* cookie_soft.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = cookie_soft.wav; sourceTree = "<group>"; };
 		D10000000000000100000001 /* Cookie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cookie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +96,7 @@
 				C10000000000000100000002 /* cookie_alert.png */,
 				C10000000000000100000004 /* cookie_sit_eyes_closed.png */,
 				C10000000000000100000005 /* cookie_loaf.png */,
+				C10000000000000100000006 /* cookie_suitcase.png */,
 				C10000000000000100000007 /* _meta.json */,
 			);
 			name = Sprites;
@@ -179,6 +182,7 @@
 				A20000000000000100000002 /* cookie_alert.png in Resources */,
 				A20000000000000100000004 /* cookie_sit_eyes_closed.png in Resources */,
 				A20000000000000100000005 /* cookie_loaf.png in Resources */,
+				A20000000000000100000006 /* cookie_suitcase.png in Resources */,
 				A20000000000000100000007 /* _meta.json in Resources */,
 				A20000000000000100000008 /* cookie_soft.wav in Resources */,
 			);

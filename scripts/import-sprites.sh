@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copy Ashling's approved Cookie cutouts (Weixin 4-pack) into this repo.
+# Copy Ashling's approved Cookie cutouts (Weixin 5-pack) into this repo.
 # Run on the Mac. Pixel files live at the Desktop path below — this VM does not invent sprites.
 set -euo pipefail
 
@@ -11,6 +11,7 @@ files=(
   cookie_loaf.png
   cookie_sleep.png
   cookie_alert.png
+  cookie_suitcase.png
 )
 
 optional=(
@@ -20,12 +21,11 @@ optional=(
 
 dropped=(
   cookie_sit.png
-  cookie_suitcase.png
 )
 
 if [[ ! -d "$SRC" ]]; then
   echo "Sprite folder not found: $SRC" >&2
-  echo "Set COOKIE_SPRITES to the folder that holds the four Weixin PNGs." >&2
+  echo "Set COOKIE_SPRITES to the folder that holds the five Weixin PNGs." >&2
   exit 1
 fi
 

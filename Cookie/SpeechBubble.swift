@@ -60,12 +60,13 @@ final class SpeechBubble {
         panel.orderOut(nil)
     }
 
-    func show(near cookie: NSRect) {
+    func show(near cookie: NSRect, choosingFrom lines: [String]? = nil) {
         guard !SoundPlayer.shared.isMuted else { return }
         guard Date().timeIntervalSince(lastShown) >= cooldown else { return }
         lastShown = Date()
 
-        let line = Self.lines.randomElement() ?? "I will pee on your bed"
+        let pool = lines ?? Self.lines
+        let line = pool.randomElement() ?? "I will pee on your bed"
         label.stringValue = line
         let textSize = label.sizeThatFits(NSSize(width: 240, height: 64))
         let pad: CGFloat = 14
