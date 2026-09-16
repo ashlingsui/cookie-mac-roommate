@@ -6,11 +6,13 @@ enum Habitat {
         NSScreen.main ?? NSScreen.screens[0]
     }
 
-    /// Bottom-right quadrant / corner zone of `NSScreen.main.visibleFrame`.
+    /// Bottom-right band of `NSScreen.main.visibleFrame`.
+    /// Right ~36% of width, bottom ~28% of height — no large min-height floor
+    /// (that used to let roam climb into mid/upper screen).
     static func zone() -> NSRect {
         let vis = screen().visibleFrame
-        let width = min(vis.width, max(300, vis.width * 0.38))
-        let height = min(vis.height, max(340, vis.height * 0.42))
+        let width = vis.width * 0.36
+        let height = vis.height * 0.28
         return NSRect(
             x: vis.maxX - width,
             y: vis.minY,
